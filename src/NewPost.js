@@ -1,9 +1,11 @@
 import React from 'react';
 import { ArrowPathIcon } from '@heroicons/react/24/solid';
+import { signIn, useSession } from 'next-auth/react';
 
 const MAX_POST_LENGTH = 255;
 
 const NewPost = ({ canPost, addPostCb, loading }) => {
+  const { data: session } = useSession();
   const [postText, setPostText] = React.useState('');
 
   const handleChangePostText = React.useCallback(
@@ -24,10 +26,10 @@ const NewPost = ({ canPost, addPostCb, loading }) => {
   }, [postText]);
 
   const handleAddPost = React.useCallback(() => {
-    if (postText.trim().length === 0) return;
+    if (postText.trim().length === 0 || !session) return;
     addPostCb({ text: postText.trim() });
     setPostText('');
-  }, [addPostCb, postText]);
+  }, [addPostCb, postText, session]);
 
   if (!canPost)
     return (
@@ -44,6 +46,20 @@ const NewPost = ({ canPost, addPostCb, loading }) => {
       </div>
     );
 
+  if (!session) {
+    return (
+      <div className='m-3 flex flex-col items-center justify-center rounded-xl bg-neutral-800 p-4'>
+        <h1>
+          Please{' '}
+          <a className='cursor-pointer underline' onClick={() => signIn()}>
+            log in
+          </a>{' '}
+          to post
+        </h1>
+      </div>
+    );
+  }
+
   return (
     <div className='m-3 grid grid-cols-2 gap-2 rounded-xl bg-neutral-800 p-4'>
       <textarea
@@ -55,12 +71,7 @@ const NewPost = ({ canPost, addPostCb, loading }) => {
         className='col-span-full resize-none rounded bg-neutral-900 focus:outline-none'
       />
       {letterCount()}
-      <button
-        onClick={handleAddPost}
-        className='transition-duration-200 rounded bg-neutral-900 px-4 py-0.5 transition-shadow hover:shadow-md hover:shadow-gray-100'
-      >
-        Post
-      </button>
+      <button onClick={handleAddPost}>Post</button>
     </div>
   );
 };

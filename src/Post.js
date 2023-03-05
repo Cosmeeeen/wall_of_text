@@ -8,7 +8,6 @@ const Post = ({ text, createdAt, user = 'unknown' }) => {
   React.useEffect(() => {
     setMinutesAgo(formatMinutesAgo(createdAt));
     const minutesAgoRefresh = setInterval(() => {
-      console.log('refreshed');
       setMinutesAgo(formatMinutesAgo(createdAt));
     }, 30 * 1000);
     return () => clearInterval(minutesAgoRefresh);

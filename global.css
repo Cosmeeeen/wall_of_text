@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body, html, #__next {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  @apply bg-neutral-900 text-gray-100;
+}
+
+button {
+  @apply rounded px-4 py-0.5 transition-all text-neutral-900 hover:animate-pulse;
+  backdrop-filter: invert(50%);
+}
+
+button:hover{
+  backdrop-filter: invert(80%);
+}

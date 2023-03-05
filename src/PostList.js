@@ -3,7 +3,6 @@ import axios from 'axios';
 
 import NewPost from './NewPost';
 import Post from './Post';
-import { minutesAgo } from '../utils/time';
 
 const PostList = ({ initialPosts }) => {
   const [posts, setPosts] = React.useState(initialPosts);
@@ -28,7 +27,7 @@ const PostList = ({ initialPosts }) => {
   );
 
   return (
-    <div className='h-fit w-1/3'>
+    <div className='h-fit w-full max-w-xl'>
       <NewPost addPostCb={addPostCb} canPost={true} loading={loadingNewPost} />
       {posts?.length ? (
         posts.map(post => <Post text={post.text} createdAt={post.createdAt} key={post.id} />)
